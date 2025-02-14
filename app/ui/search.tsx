@@ -5,21 +5,21 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
 export default function Search({ placeholder }: { placeholder: string }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+  const searchParams = useSearchParams(); //?query=term
+  const pathname = usePathname(); //dashboard/invoices
   const { replace } = useRouter();
 
   const handlerSearch = useDebouncedCallback((term) => {
-    const params = new URLSearchParams(searchParams);
-    console.log(`Searching... ${term}`);
+    const params = new URLSearchParams(searchParams); //?query=term
+    params.set("page", "1"); //?query=term&page=1
 
     if (term) {
-      params.set("query", term);
+      params.set("query", term); //?query=term&page=1
     } else {
-      params.delete("query");
+      params.delete("query"); //
     }
-    replace(`${pathname}?${params.toString()}`);
-  }, 300);
+    replace(`${pathname}?${params.toString()}`); //dashboard/invoices?query=term&page=1
+  }, 500);
 
   return (
     <div className="relative flex flex-1 flex-shrink-0">
