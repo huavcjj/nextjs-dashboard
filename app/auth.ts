@@ -1,10 +1,10 @@
-import { authConfig } from "@/app/auth.config";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import postgres from "postgres";
 import type { User } from "app/lib/definitions";
 import bcrypt from "bcrypt";
+import { authConfig } from "@/app/auth.config";
 
 const sql = postgres(process.env.POSTGERES_URL!, { ssl: "require" });
 
@@ -30,6 +30,7 @@ export const { auth, signIn, signOut } = NextAuth({
           const { email, password } = parsedCredentials.data;
           const user = await getUser(email);
           if (!user) return null;
+
           const passwordsMatch = await bcrypt.compare(password, user.password);
           if (passwordsMatch) return user;
         }
